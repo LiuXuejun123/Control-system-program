@@ -1,0 +1,10 @@
+release/discrete.o
+release/statespace.o
+release/integrator.o
+release/simplesystem.o
+release/main.o
+release/widget.o
+release/qcustomplot.o
+release/gain.o
+release/moc_widget.o
+release/moc_qcustomplot.o
