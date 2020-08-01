@@ -7,7 +7,7 @@
 // Set stop time here
 // --------------------------
 #define ENDOFTIME 3
-#define SAMPLINGTIMEMSEC 100
+#define SAMPLINGTIMEMSEC 10
 // --------------------------
 // Set stop time here
 // --------------------------
@@ -87,6 +87,13 @@ Widget::Widget(QWidget *parent) :
    // m_integrator=new Integrator(0.0);
     //m_simplesystem = new simplesystem(0.0);
     m_StateSpace = new StateSpace(0.0,0.0,0.0,-10,0,0,0,-5,0,0,0,-2.5,2,3,1,10,0,0.7,0);
+    m_StateSpace_input = new StateSpace(1.0,0,0,
+                                        -3,0,0,
+                                        0,0,0,
+                                        0,0,0,
+                                        0,0,0,
+                                        1,0,0,
+                                        0);
     m_Discrete1=new Discrete(0.0,0.0,0.0,
                              0.135335283236613,	0,	0,
                              0,	0.367879441171442,	0,
@@ -141,6 +148,7 @@ Widget::Widget(QWidget *parent) :
                                    0,0,0,
                                    1,0,0,0);//0.01s u
 
+
     // --------------------------
     // Create the object here
     // --------------------------
@@ -170,6 +178,7 @@ Widget::~Widget()
     // Delete the object here
     // --------------------------
     delete m_StateSpace;
+    delete m_StateSpace_input;
     delete m_Discrete1;
     delete m_Discrete2;
     delete m_Discrete3;
@@ -209,10 +218,10 @@ void Widget::update() {
         dt = relativeTime - dt;
     }
 
-	inputPlot->graph(0)->addData(relativeTime / 1000.0, signal);
-    inputPlot->graph(1)->addData(relativeTime / 1000.0,m_Discrete_input1->getoutput());
+    inputPlot->graph(0)->addData(relativeTime / 1000.0, m_StateSpace_input->getoutput());
+    inputPlot->graph(1)->addData(relativeTime / 1000.0,m_Discrete_input3->getoutput());
     outputPlot->graph(0)->addData(relativeTime / 1000.0, m_StateSpace->getoutput());
-    outputPlot->graph(1)->addData(relativeTime / 1000.0, m_Discrete1->getoutput());
+    outputPlot->graph(1)->addData(relativeTime / 1000.0, m_Discrete3->getoutput());
 
 
     inputPlot->replot();
@@ -222,7 +231,8 @@ void Widget::update() {
     // Update the object here
     // --------------------------
     //object->update(signal);
-    m_StateSpace->update(signal,dt/1000.0);
+    m_StateSpace_input->update(sig,dt/1000.0);
+    m_StateSpace->update(m_StateSpace_input->getoutput(),dt/1000.0);
                              //sig=0
     m_Discrete_input1->update(sig);
     m_Discrete1->update(m_Discrete_input1->getoutput());

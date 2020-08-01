@@ -47,6 +47,7 @@ private:
     //Integrator *m_integrator;
     //simplesystem *m_simplesystem;
     StateSpace *m_StateSpace;
+    StateSpace *m_StateSpace_input;
     Discrete *m_Discrete1;
     Discrete *m_Discrete2;
     Discrete *m_Discrete3;
